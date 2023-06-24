@@ -1,6 +1,7 @@
 package com.example.project.controller.vm;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record DetailedDelivery(
         Long id,
@@ -10,6 +11,7 @@ public record DetailedDelivery(
         String arrivalAddress,
         Long distance,
         DeliveryVm delivery,
-        TransportVm transport
+        TransportVm transport,
+        List<String> stoppedAddresses
 ) {
 }

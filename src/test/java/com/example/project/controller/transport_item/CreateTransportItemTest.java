@@ -10,7 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.sql.Timestamp;
+import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,7 +36,8 @@ public class CreateTransportItemTest extends CommonIntegrationTest {
                         Timestamp.valueOf("2023-02-05 08:30:00"),
                         "London",
                         1L,
-                        150000L));
+                        150000L,
+                        List.of("Berlin", "Warsaw")));
 
         resultActions
                 .andExpect(status().isCreated())
@@ -47,7 +50,11 @@ public class CreateTransportItemTest extends CommonIntegrationTest {
                 .andExpect(jsonPath("$.result.delivery.owner.name").value("Axror"))
                 .andExpect(jsonPath("$.result.delivery.owner.phoneNumber").value("+998900020506"))
                 .andExpect(jsonPath("$.result.transport.id").value(1))
-                .andExpect(jsonPath("$.result.transport.number").value("01A475AA"));
+                .andExpect(jsonPath("$.result.transport.number").value("01A475AA"))
+                .andExpect(jsonPath("$.result.stoppedAddresses").isArray())
+                .andExpect(jsonPath("$.result.stoppedAddresses", hasSize(2)))
+                .andExpect(jsonPath("$.result.stoppedAddresses.[0]").value("Berlin"))
+                .andExpect(jsonPath("$.result.stoppedAddresses.[1]").value("Warsaw"));
     }
 
 

@@ -7,6 +7,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,6 +32,9 @@ public class TransportItem {
 
     @Column(name = "distance")
     private Long distance;
+
+    @ElementCollection
+    private List<String> stoppedAddresses;
 
     @OneToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
