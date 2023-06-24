@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -40,7 +41,8 @@ public class GetTransportItemTest extends CommonIntegrationTest {
                         Timestamp.valueOf("2023-02-05 08:30:00"),
                         "London",
                         1L,
-                        150000L));
+                        150000L,
+                        List.of("Manchester")));
 
         testDataHelperTransportItem.createTransportItemRequest(
                 2L,
@@ -50,7 +52,8 @@ public class GetTransportItemTest extends CommonIntegrationTest {
                         Timestamp.valueOf("2023-02-05 08:30:00"),
                         "Paris",
                         2L,
-                        450000L));
+                        450000L,
+                        List.of("Berlin")));
 
         ResultActions resultActions = testDataHelperTransportItem.getAllTransportItemsRequest();
 
@@ -65,6 +68,8 @@ public class GetTransportItemTest extends CommonIntegrationTest {
                 .andExpect(jsonPath("$.result.[0].delivery.owner.name").value("Axror"))
                 .andExpect(jsonPath("$.result.[0].delivery.owner.phoneNumber").value("+998900020506"))
                 .andExpect(jsonPath("$.result.[0].transport.number").value("01A475AA"))
+                .andExpect(jsonPath("$.result.[0].stoppedAddresses", hasSize(1)))
+                .andExpect(jsonPath("$.result.[0].stoppedAddresses.[0]").value("Manchester"))
 
                 .andExpect(jsonPath("$.result.[1].id").value(2))
                 .andExpect(jsonPath("$.result.[1].departureAddress").value("Fergana"))
@@ -73,7 +78,9 @@ public class GetTransportItemTest extends CommonIntegrationTest {
                 .andExpect(jsonPath("$.result.[1].delivery.id").value(2))
                 .andExpect(jsonPath("$.result.[1].delivery.owner.name").value("Axror"))
                 .andExpect(jsonPath("$.result.[1].delivery.owner.phoneNumber").value("+998900020506"))
-                .andExpect(jsonPath("$.result.[1].transport.number").value("01A001AA"));
+                .andExpect(jsonPath("$.result.[1].transport.number").value("01A001AA"))
+                .andExpect(jsonPath("$.result.[1].stoppedAddresses", hasSize(1)))
+                .andExpect(jsonPath("$.result.[1].stoppedAddresses.[0]").value("Berlin"));
 
     }
 
@@ -99,7 +106,8 @@ public class GetTransportItemTest extends CommonIntegrationTest {
                         Timestamp.valueOf("2023-02-05 08:30:00"),
                         "London",
                         1L,
-                        150000L));
+                        150000L,
+                        List.of("Manchester")));
 
         testDataHelperTransportItem.createTransportItemRequest(
                 2L,
@@ -109,7 +117,8 @@ public class GetTransportItemTest extends CommonIntegrationTest {
                         Timestamp.valueOf("2023-02-05 08:30:00"),
                         "Paris",
                         2L,
-                        450000L));
+                        450000L,
+                        List.of("Moscov")));
 
         ResultActions resultActions = testDataHelperTransportItem.getAllTransportItemsByTransportIdRequest(2L);
 
@@ -123,7 +132,9 @@ public class GetTransportItemTest extends CommonIntegrationTest {
                 .andExpect(jsonPath("$.result.[0].delivery.id").value(2))
                 .andExpect(jsonPath("$.result.[0].delivery.owner.name").value("Axror"))
                 .andExpect(jsonPath("$.result.[0].delivery.owner.phoneNumber").value("+998900020506"))
-                .andExpect(jsonPath("$.result.[0].transport.number").value("01A001AA"));
+                .andExpect(jsonPath("$.result.[0].transport.number").value("01A001AA"))
+                .andExpect(jsonPath("$.result[0].stoppedAddresses", hasSize(1)))
+                .andExpect(jsonPath("$.result[0].stoppedAddresses.[0]").value("Moscov"));
 
     }
 
